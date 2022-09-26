@@ -1,0 +1,7 @@
+---
+import { Code } from "astro/components";
+
+let { code } = Astro.props;
+code = await code;
+---
+<Code code={code} lang="js"></Code>
