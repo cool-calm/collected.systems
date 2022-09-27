@@ -7,11 +7,17 @@ layout: ../layouts/LandingLayout.astro
 <style>
   main a {
     display: inline-flex;
-    font-size: 2rem;
+    font-size: 1.75rem;
     padding: 0.5em 1em;
     border-radius: 999px;
     background-color: var(--theme-accent);
 		color: white;
+    text-decoration: none;
+  }
+  main a:hover {
+    color: hsl(var(--color-blue-dark));
+    background-color: white;
+    box-shadow: 0 0 16px -2px currentColor;
     text-decoration: none;
   }
 </style>
