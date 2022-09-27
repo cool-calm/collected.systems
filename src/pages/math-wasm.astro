@@ -1,0 +1,36 @@
+---
+// import mathWasmBase64 from "../wasm/math-wasm-base64.json";
+import mathWasmHex from "../wasm/math-wasm-hex.json";
+
+function* decodeHex(input: string) {
+  if (typeof input !== 'string') return;
+
+  const iterator = input[Symbol.iterator]();
+  while (true) {
+    const first = iterator.next();
+    if (first.done) break;
+    const second = iterator.next();
+
+    yield parseInt(first.value + second.value, 16);
+  }
+}
+
+const mathWasmBytes = Uint8Array.from(decodeHex(mathWasmHex));
+
+const results = Array<number>();
+
+const { instance } = await WebAssembly.instantiate(mathWasmBytes, {
+  env: {
+    print: (result: number) => {
+      results.push(result);
+    },
+  },
+});
+
+const add = instance.exports.add as (a: number, b: number) => number;
+
+add(1, 2);
+add(5, 7);
+---
+
+<p>{results.join(", ")}</p>
