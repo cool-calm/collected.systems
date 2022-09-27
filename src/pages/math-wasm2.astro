@@ -1,0 +1,22 @@
+---
+const mathWasmBytes = await fetch(
+  "https://storage.googleapis.com/collected-public/sha256/application/wasm/523dcf0ed3b8beba9ed17055741371f47fc1970e01cfd18df97f0eefd6607062.wasm"
+).then((res) => res.arrayBuffer());
+
+const results = Array<number>();
+
+const { instance } = await WebAssembly.instantiate(mathWasmBytes, {
+  env: {
+    print: (result: number) => {
+      results.push(result);
+    },
+  },
+});
+
+const add = instance.exports.add as (a: number, b: number) => number;
+
+add(1, 2);
+add(5, 7);
+---
+
+<p>{results.join(", ")}</p>
