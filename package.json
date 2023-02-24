@@ -12,17 +12,17 @@
   "dependencies": {
     "@algolia/client-search": "^4.14.2",
     "@docsearch/css": "^3.2.1",
-    "@docsearch/react": "^3.2.1",
-    "preact": "^10.10.3",
+    "@docsearch/react": "^3.3.3",
+    "preact": "^10.12.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@astrojs/deno": "^1.0.0",
-    "@astrojs/mdx": "^0.10.0",
-    "@astrojs/preact": "^1.0.2",
-    "@astrojs/react": "^1.0.0",
-    "@types/react": "^18.0.17",
-    "astro": "^1.0.6"
+    "@astrojs/deno": "^1.2.0",
+    "@astrojs/mdx": "^0.10.3",
+    "@astrojs/preact": "^1.2.0",
+    "@astrojs/react": "^1.2.2",
+    "@types/react": "^18.0.28",
+    "astro": "^1.9.2"
   }
 }
