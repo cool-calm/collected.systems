@@ -24,7 +24,7 @@ layout: ../layouts/LandingLayout.astro
 
 <a href="/ideas">Read more</a>
 
-## Today’s services
+## With today’s services
 
 - You sign up
 - You add your data over time
