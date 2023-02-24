@@ -1,7 +1,9 @@
 ---
-const mathWasmBytes = await fetch(
-  "https://storage.googleapis.com/collected-public/sha256/application/wasm/1ed9c0b3c3e251d85b1cd34eeefbe64391e39baeda8a36aee4cf0ed7280b447f.wasm"
-).then((res) => res.arrayBuffer());
+const sha256 = "1ed9c0b3c3e251d85b1cd34eeefbe64391e39baeda8a36aee4cf0ed7280b447f";
+const wasmURL = `https://storage.googleapis.com/collected-public/sha256/application/wasm/${sha256}.wasm`;
+const wasmLocalURL = `/collected-public/wasm/${sha256}`;
+
+const mathWasmBytes = await fetch(wasmURL).then((res) => res.arrayBuffer());
 
 const results = Array<number>();
 
@@ -13,12 +15,67 @@ const { instance } = await WebAssembly.instantiate(mathWasmBytes, {
 
 const multiply = instance.exports.multiply as (a: number, b: number) => number;
 
-results.push(multiply(2, 3));
-results.push(multiply(5, 7));
+// results.push(multiply(2, 3));
+// results.push(multiply(5, 7));
 
-const a: number = parseInt(Astro.url.searchParams.get('a')) || 1;
-const b: number = parseInt(Astro.url.searchParams.get('b')) || 1;
+const a: number = parseInt(Astro.url.searchParams.get('a') ?? "") || 1;
+const b: number = parseInt(Astro.url.searchParams.get('b') ?? "") || 1;
 results.push(multiply(a, b));
 ---
 
-<p>{results.join(", ")}</p>
+<p>Executed on server: {results.join(", ")}</p>
+
+<hr>
+
+<custom-interactivity data-url={wasmLocalURL}>
+  <form id="multiply-form">
+    <label for="input-a">
+      A
+      <input id="input-a" type="number" name="a" value={a}>
+    </label>
+    <label for="input-a">
+      B
+      <input id="input-b" type="number" name="b" value={b}>
+    </label>
+    <button>Run</button>
+    <output style="display: block; margin-top: 1rem;"></output>
+  </form>
+</custom-interactivity>
+
+<script>
+  class CustomInteractivity extends HTMLElement {
+    constructor() {
+      super();
+
+      const wasmURL = this.dataset.url as string;
+      init(wasmURL);
+    }
+  }
+
+  function init(wasmURL: string) {
+    console.log("init", wasmURL);
+    const form = document.querySelector('form#multiply-form') as HTMLFormElement;
+    const output = form.querySelector("output") as HTMLOutputElement;
+
+    const wasmPromise = WebAssembly.instantiateStreaming(fetch(wasmURL));
+    wasmPromise.then(({ instance, module }) => {
+      const multiply = instance.exports.multiply as (a: number, b: number) => number;
+      output.innerText = "Change to see the calculation live locally.";
+
+      function update() {
+        const data = new FormData(form);
+        const a = parseInt(String(data.get("a"))) || 1;
+        const b = parseInt(String(data.get("b"))) || 1;
+        const result = multiply(a, b);
+        output.innerText = `Executed in browser: ${result}`;
+      }
+
+      form.addEventListener("change", (event) => {
+        update();
+      });
+      requestAnimationFrame(update);
+    });
+  }
+
+  customElements.define("custom-interactivity", CustomInteractivity);
+</script>
