@@ -70,7 +70,7 @@ results.push(multiply(a, b));
         output.innerText = `Executed in browser: ${result}`;
       }
 
-      form.addEventListener("change", (event) => {
+      form.addEventListener("input", (event) => {
         update();
       });
       requestAnimationFrame(update);
