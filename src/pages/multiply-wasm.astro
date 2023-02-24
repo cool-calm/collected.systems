@@ -1,0 +1,24 @@
+---
+const mathWasmBytes = await fetch(
+  "https://storage.googleapis.com/collected-public/sha256/application/wasm/1ed9c0b3c3e251d85b1cd34eeefbe64391e39baeda8a36aee4cf0ed7280b447f.wasm"
+).then((res) => res.arrayBuffer());
+
+const results = Array<number>();
+
+const { instance } = await WebAssembly.instantiate(mathWasmBytes, {
+  env: {
+    print: (result: number) => {},
+  },
+});
+
+const multiply = instance.exports.multiply as (a: number, b: number) => number;
+
+results.push(multiply(2, 3));
+results.push(multiply(5, 7));
+
+const a: number = parseInt(Astro.url.searchParams.get('a')) || 1;
+const b: number = parseInt(Astro.url.searchParams.get('b')) || 1;
+results.push(multiply(a, b));
+---
+
+<p>{results.join(", ")}</p>
