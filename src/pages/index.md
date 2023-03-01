@@ -26,18 +26,18 @@ layout: ../layouts/LandingLayout.astro
 
 ## With today’s services
 
-- You sign up
-- You add your data over time
-- You leave: they shutdown, or they start to suck, or you jump to something better
+1. You sign up
+2. You add your data over time
+3. You leave: they shutdown, or they start to suck, or you jump to something better
 
 ## When you own your own data
 
-- You set up
-- You add your data over time
-- If we shutdown, you still have your data
-- If we start to suck, you can move all your data
+1. You set up
+2. You add your data over time
+3. If we shutdown, you still have your data
+4. If we start to suck, you can move all your data
 
-## When you run your own service
+## However, when you run your own service, you worry about:
 
 - What if the service goes down?
 - What if your service gets out of date?
