@@ -7,11 +7,7 @@ const mathWasmBytes = await fetch(wasmURL).then((res) => res.arrayBuffer());
 
 const results = Array<number>();
 
-const { instance } = await WebAssembly.instantiate(mathWasmBytes, {
-  env: {
-    print: (result: number) => {},
-  },
-});
+const { instance } = await WebAssembly.instantiate(mathWasmBytes);
 
 const multiply = instance.exports.multiply as (a: number, b: number) => number;
 
@@ -53,7 +49,6 @@ results.push(multiply(a, b));
   }
 
   function init(wasmURL: string) {
-    console.log("init", wasmURL);
     const form = document.querySelector('form#multiply-form') as HTMLFormElement;
     const output = form.querySelector("output") as HTMLOutputElement;
 
