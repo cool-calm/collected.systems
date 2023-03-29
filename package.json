@@ -13,16 +13,16 @@
     "@algolia/client-search": "^4.14.2",
     "@docsearch/css": "^3.2.1",
     "@docsearch/react": "^3.3.3",
-    "preact": "^10.12.1",
+    "preact": "^10.13.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@astrojs/deno": "^4.0.2",
+    "@astrojs/deno": "^4.1.0",
     "@astrojs/mdx": "^0.17.2",
-    "@astrojs/preact": "^2.0.3",
-    "@astrojs/react": "^2.0.2",
-    "@types/react": "^18.0.28",
-    "astro": "^2.0.15"
+    "@astrojs/preact": "^2.1.0",
+    "@astrojs/react": "^2.1.0",
+    "@types/react": "^18.0.31",
+    "astro": "^2.1.8"
   }
 }
