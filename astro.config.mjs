@@ -21,7 +21,7 @@ export default defineConfig({
 	site: `http://astro.build`,
   vite: {
     ssr: {
-      noExternal: false
+      external: ["fs"]
     }
   }
 });
