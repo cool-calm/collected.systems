@@ -18,5 +18,10 @@ export default defineConfig({
 		react(),
 		mdx()
 	],
-	site: `http://astro.build`
+	site: `http://astro.build`,
+  vite: {
+    ssr: {
+      noExternal: false
+    }
+  }
 });
