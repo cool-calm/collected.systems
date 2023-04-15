@@ -1,0 +1,56 @@
+---
+const sha256 = Astro.params.sha256 as string;
+
+const url = `https://storage.googleapis.com/collected-public/sha256/application/wasm/${sha256}.wasm`;
+const res = await fetch(url);
+if (res.status >= 400) {
+  return new Response(`Status: ${res.status}`, {
+    headers: { "content-type": "text/plain; charset=utf-8" },
+  });
+}
+
+const memory = new WebAssembly.Memory({ initial: 2 });
+const { instance } = await WebAssembly.instantiate(await res.arrayBuffer(), {
+  env: {
+    buffer: memory,
+  },
+});
+
+const rewind = instance.exports.rewind as () => void;
+const next_body_chunk = instance.exports.next_body_chunk as () => number;
+
+const memoryBytes = new Uint8Array(memory.buffer);
+const utf8encoder = new TextEncoder();
+const utf8decoder = new TextDecoder();
+
+function update(): string {
+  rewind();
+
+  const chunks = [];
+  //const chunks = new Uint8Array(1000);
+  while (true) {
+    const ptr = next_body_chunk();
+    if (ptr === 0) {
+      break;
+    }
+
+    // Search for null-terminating byte.
+    const endPtr = memoryBytes.indexOf(0, ptr);
+    // Get subsection of memory between start and end, and decode it as UTF-8.
+    //return utf8decoder.decode(memoryBytes.subarray(ptr, endPtr));
+    //chunks.concat(memoryToRead.subarray(0, count));
+    chunks.push(memoryBytes.subarray(ptr, endPtr));
+    //chunks.set(memoryBytes.subarray(ptr, endPtr), chunks.length);
+  }
+
+  // There surely must be a better way to do this.
+  // See: https://stackoverflow.com/questions/49129643/how-do-i-merge-an-array-of-uint8arrays
+  const bytes = new Uint8Array(chunks.map(chunk => [...chunk]).flat());
+  const html = utf8decoder.decode(bytes);
+  return html;
+}
+
+return new Response(update(), {
+  headers: { "content-type": "text/html; charset=utf-8" },
+});
+---
