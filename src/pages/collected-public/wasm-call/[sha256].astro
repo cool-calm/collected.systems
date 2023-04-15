@@ -1,6 +1,7 @@
 ---
-const input = Astro.url.searchParams.get("input") ?? "";
-const functionName = Astro.url.searchParams.get("func") ?? "";
+const functionName = Astro.url.searchParams.get("func");
+const args = Astro.url.searchParams.getAll("param").map(parseFloat);
+const input = Astro.url.searchParams.get("input");
 
 const sha256 = Astro.params.sha256 as string;
 
@@ -19,19 +20,28 @@ const { instance } = await WebAssembly.instantiate(await res.arrayBuffer(), {
   },
 });
 
-const inputOffset = (instance.exports.input_offset as WebAssembly.Global).value;
+let written = 0;
+if (typeof input === "string") {
+  const inputOffset = (instance.exports.input_offset as WebAssembly.Global)
+    .value;
 
-const memoryBytes = new Uint8Array(memory.buffer);
-const memoryToWrite = memoryBytes.subarray(inputOffset);
-const utf8encoder = new TextEncoder();
-const { written } = utf8encoder.encodeInto(input, memoryToWrite);
-
-const func = instance.exports[functionName]
-if (typeof func !== "function") {
-  throw Error(`Expected ${functionName} to be exported as a function.`);
+  const memoryBytes = new Uint8Array(memory.buffer);
+  const memoryToWrite = memoryBytes.subarray(inputOffset);
+  const utf8encoder = new TextEncoder();
+  written = utf8encoder.encodeInto(input, memoryToWrite).written!;
 }
-const result = func();
+
+let result = null;
+if (typeof functionName === "string") {
+  const func = instance.exports[functionName];
+  if (typeof func !== "function") {
+    throw Error(`Expected ${functionName} to be exported as a function.`);
+  }
+  // result = JSON.stringify(args);
+  result = func(...args);
+}
 ---
+
 <div>Exports: {JSON.stringify(Object.keys(instance.exports))}</div>
 <div>Wrote {written} bytes</div>
 <div>Result: {result}</div>
