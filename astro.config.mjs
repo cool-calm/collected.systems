@@ -22,6 +22,11 @@ export default defineConfig({
   vite: {
     ssr: {
       external: ["fs"]
+    },
+    resolve: {
+      alias: {
+        punycode: 'rollup-plugin-node-polyfills/polyfills/punycode',
+      }
     }
   }
 });
