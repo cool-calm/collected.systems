@@ -40,7 +40,7 @@ export default defineConfig({
         // Enable esbuild polyfill plugins
         plugins: [
           NodeGlobalsPolyfillPlugin({
-            process: true,
+            process: false,
             buffer: true
           }),
           NodeModulesPolyfillPlugin()
@@ -52,7 +52,9 @@ export default defineConfig({
         plugins: [
           // Enable rollup polyfills plugin
           // used during production bundling
-          rollupNodePolyFill()
+          // rollupNodePolyFill({
+          //   exclude: ["process"]
+          // })
         ]
       }
     }
