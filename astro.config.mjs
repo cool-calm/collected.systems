@@ -28,7 +28,7 @@ export default defineConfig({
     },
     resolve: {
       alias: {
-        punycode: 'rollup-plugin-node-polyfills/polyfills/punycode',
+        // punycode: 'rollup-plugin-node-polyfills/polyfills/punycode',
       }
     },
     optimizeDeps: {
@@ -39,11 +39,11 @@ export default defineConfig({
         },
         // Enable esbuild polyfill plugins
         plugins: [
-          NodeGlobalsPolyfillPlugin({
-            process: false,
-            buffer: true
-          }),
-          NodeModulesPolyfillPlugin()
+          // NodeGlobalsPolyfillPlugin({
+          //   process: false,
+          //   buffer: true
+          // }),
+          // NodeModulesPolyfillPlugin()
         ]
       }
     },
