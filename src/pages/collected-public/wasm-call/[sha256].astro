@@ -37,7 +37,6 @@ if (typeof functionName === "string") {
   if (typeof func !== "function") {
     throw Error(`Expected ${functionName} to be exported as a function.`);
   }
-  // result = JSON.stringify(args);
   result = func(...args);
 }
 ---

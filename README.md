@@ -1,4 +1,4 @@
-# Astro Starter Kit: Docs Site
+# Collected.Systems
 
 ```bash
 npm init astro -- --template docs
